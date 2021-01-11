@@ -20,4 +20,5 @@ jobs:
       - run: |
           npm install jasmine-node -g
           npm run test
-      - run: eslint ./    
+      - run: eslint ./ --fix
+      - run: eslint     
