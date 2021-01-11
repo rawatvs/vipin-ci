@@ -18,3 +18,4 @@ jobs:
           ls -a
       - run: npm install -g eslint
       - run: eslint ./
+      - run: npm run test  
