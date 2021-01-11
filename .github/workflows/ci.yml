@@ -13,3 +13,7 @@ jobs:
       - run: |
           pwd
           ls -a
+      - name: install npm package
+      - run: npm install 
+      - name: Run Static code analysis
+      - run: eslint ./
