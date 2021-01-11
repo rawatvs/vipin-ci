@@ -22,6 +22,6 @@ jobs:
           npm run test
           npm i webpack-cli
           npm i webpack
-          rpm run build          
+          npm run build          
       - run: eslint ./ --fix
       - run: eslint     
