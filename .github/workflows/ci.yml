@@ -20,5 +20,8 @@ jobs:
       - run: |
           npm install jasmine-node -g
           npm run test
+          npm i webpack-cli
+          npm i webpack
+          
       - run: eslint ./ --fix
       - run: eslint     
