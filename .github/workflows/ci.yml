@@ -13,6 +13,8 @@ jobs:
       - run: |
           pwd
           ls -a
-      - run: npm install
+      - run: npm ci
       - run: ls -a 
-      - run: npm run eslint
+      - run: |
+          ls -a
+          npm run eslint
