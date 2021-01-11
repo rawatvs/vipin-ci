@@ -16,5 +16,5 @@ jobs:
       - run: npm ci
       - run: |
           ls -a
-          npm install -g eslint
-          eslint ./
+      - run: npm install -g eslint
+      - run: eslint ./
