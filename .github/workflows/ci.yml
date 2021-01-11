@@ -17,5 +17,7 @@ jobs:
       - run: |
           ls -a
       - run: npm install -g eslint
-      - run: npm run test
+      - run: |
+          npm install jasmine-node -g
+          npm run test
       - run: eslint ./    
