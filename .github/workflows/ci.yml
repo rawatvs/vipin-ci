@@ -14,7 +14,9 @@ jobs:
           pwd
           ls -a
       - run: npm ci
-      - run: ls -a 
       - run: |
           ls -a
+          npm install -g eslint 
+      - run: |
+          pwd
           npm run eslint
