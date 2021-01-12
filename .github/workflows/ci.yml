@@ -32,7 +32,7 @@ jobs:
 #         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: /home/runner/work/vipin-ci/vipin-ci/reports/**/*.xml   
+          report_paths: /home/runner/work/vipin-ci/vipin-ci/reports/**/*.xml   
       #- run: |
 #           ls -a
 #       - run: npm install -g eslint
