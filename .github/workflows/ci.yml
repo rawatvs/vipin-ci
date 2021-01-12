@@ -24,7 +24,7 @@ jobs:
         run: npm run test
       - name: Checking report
         run:  |
-          ls -lrt /home/runner/work/vipin-ci/vipin-ci/reports
+          ls -lrt $GITHUB_WORKSPACE/reports
           echo "######################Time#################"
           date
       - name: Publish Unit Test Results
@@ -32,7 +32,7 @@ jobs:
 #         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_paths: /home/runner/work/vipin-ci/vipin-ci/reports/**/*.xml   
+          report_paths: $GITHUB_WORKSPACE/reports/**/*.xml   
       #- run: |
 #           ls -a
 #       - run: npm install -g eslint
