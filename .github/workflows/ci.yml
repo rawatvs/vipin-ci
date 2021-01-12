@@ -32,7 +32,7 @@ jobs:
 #         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_paths: $GITHUB_WORKSPACE/reports/**/*.xml   
+          report_paths: reports/**/*.xml   
       #- run: |
 #           ls -a
 #       - run: npm install -g eslint
