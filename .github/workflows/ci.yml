@@ -22,7 +22,8 @@ jobs:
           npm i webpack
       - name: Run Unit Test
         run: npm run test
-        
+      - name: Checking report
+        run:  ls -lrt /home/runner/work/vipin-ci/vipin-ci/reports
         
       #- run: |
 #           ls -a
