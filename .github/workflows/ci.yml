@@ -13,15 +13,23 @@ jobs:
       - run: |
           pwd
           ls -a
-      - run: npm ci
-      - run: |
-          ls -a
-      - run: npm install -g eslint
-      - run: |
+      - name: Install Dependencies
+        run: |
+          npm ci
+          npm install -g eslint
           npm install jasmine-node -g
-          npm run test
           npm i webpack-cli
           npm i webpack
-          npm run build          
-      - run: eslint ./ --fix
-      - run: eslint     
+      - name: Run Unit Test
+        run: npm run test
+        
+        
+      #- run: |
+#           ls -a
+#       - run: npm install -g eslint
+#       - run: |
+          
+#           
+        
+#       - run: eslint ./ --fix
+#       - run: eslint     
