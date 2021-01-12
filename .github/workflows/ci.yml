@@ -1,44 +1,93 @@
-name: VipinCI
-on: push
-
+name: Node.js CI
+on: [push]
 jobs:
-  builds:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]       
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Nodejs
-        uses: actions/setup-node@v2
+    - uses: act10ns/slack@v1
+      with:
+          status: starting
+          channel: '#testing-for-punnet'
+          if: always()
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      id: checkout
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install
+      id: npm_install
+      run: npm install
+    - name: npm build
+      id: npm_build
+      run: npm run build --if-present
+    - run: npm install jasmine-node 
+    - name: npm test
+      id: npm_test
+      run: | 
+        chmod +x $GITHUB_WORKSPACE/reports
+        echo $GITHUB_WORKSPACE/reports
+        npm test
+      env:  
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: check reports
+      run: |
+       ls -lrt $GITHUB_WORKSPACE/reports
+       echo "######################Time#################"
+       date
+    - name: Upload Unit Test Results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: Unit Test Results 
+        path: $GITHUB_WORKSPACE/reports/*.xml 
+    - uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
+      
+      
+  publish-test-results:
+    name: "Publish Unit Tests Results"
+    needs: build
+    runs-on: ubuntu-latest
+    # the build-and-test job might be skipped, we don't need to run this job then
+    if: success() || failure()
+
+ 
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
         with:
-          node-version: "12.x"
-      - run: |
-          pwd
-          ls -a
-      - name: Install Dependencies
+          path: artifacts
+
+ 
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.6
+        with:
+         check_name: Unit Test Results
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         files: reports/*.xml
+     
+      - name: reports
         run: |
-          npm ci
-          npm install -g eslint
-          npm install jasmine-node -g
-          npm i webpack-cli
-          npm i webpack
-      - name: Run Unit Test
-        run: npm run test
-      - name: Checking report
-        run:  |
-          ls -lrt $GITHUB_WORKSPACE/reports
+          pwd
+          ls -la $GITHUB_WORKSPACE
           echo "######################Time#################"
-          date
+           date
       - name: Publish Unit Test Results
         uses: mikepenz/action-junit-report@v1
 #         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_paths: reports/**/*.xml   
-      #- run: |
-#           ls -a
-#       - run: npm install -g eslint
-#       - run: |
-          
-#           
-        
-#       - run: eslint ./ --fix
-#       - run: eslint     
+          report_paths: reports/**/*.xml 
